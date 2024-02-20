@@ -1,10 +1,10 @@
+// express
 const express = require('express');
-const bodyParser = require('body-parser');
-
 const app = express();
-const port = 3000;
 
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.set('view engine', 'ejs');
 
 let posts = [];
@@ -15,11 +15,10 @@ app.get('/', (req, res) => {
 
 app.post('/addpost', (req, res) => {
     const newPost = req.body.post;
-    console.log(newPost);
     posts.push(newPost);
     res.redirect('/');
 });
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+app.listen(3000, () => {
+    console.log(`Server is running at http://localhost:3000`);
 });
