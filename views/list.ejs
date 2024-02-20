@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>게시글 목록</title>
+</head>
+<body>
+<div class="container">
+    <h2>게시판 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>본문</th>
+            <th>작성자</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% posts.forEach(post => { %>
+            <tr>
+                <td><%= post.title %></td>
+                <td><%= post.content %></td>
+                <td><%= post.writer %></td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col text-left">
+            <button class="btn btn-primary float-end" onclick="location.href='/list/create'" type="button">게시글 등록</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

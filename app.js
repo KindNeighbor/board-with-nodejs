@@ -9,14 +9,22 @@ app.set('view engine', 'ejs');
 
 let posts = [];
 
-app.get('/', (req, res) => {
-    res.render('index', { posts });
+app.get('/list', (req, res) => {
+    res.render('list', { posts });
 });
 
-app.post('/addpost', (req, res) => {
-    const newPost = req.body.post;
+app.get('/list/create', (req, res) => {
+    res.render('create')
+})
+
+app.post('/create', (req, res) => {
+    const newPost = {
+        title: req.body.title,
+        content: req.body.content,
+        writer: req.body.writer
+    };
     posts.push(newPost);
-    res.redirect('/');
+    res.redirect('/list');
 });
 
 app.listen(3000, () => {
