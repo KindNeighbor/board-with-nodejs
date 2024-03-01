@@ -16,7 +16,6 @@
         <tr>
             <th>번호</th>
             <th>제목</th>
-            <th>본문</th>
             <th>작성자</th>
             <th>작성 시간</th>
         </tr>
@@ -25,8 +24,7 @@
         <% posts.forEach(post => { %>
             <tr>
                 <td><%= post.id %></td>
-                <td><%= post.title %></td>
-                <td><%= post.content %></td>
+                <td><a href="/list/<%= post.id %>"><%= post.title %></a></td>
                 <td><%= post.writer %></td>
                 <td><%= post.created_date.toISOString().slice(0, 19).replace("T", " ") %></td>
             </tr>

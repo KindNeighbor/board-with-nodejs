@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>게시글 목록</title>
+</head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>게시글</h2>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <p style="white-space: pre-line;">
+                <%= post.content %>
+            </p>
+        </div>
+
+        <div class="text-end col-3">
+            <div style="display: none">
+                <label>ID:</label>
+                <%= post.id %>
+            </div>
+
+            <div>
+                <label>제목:</label>
+                <%= post.title %>
+            </div>
+
+            <div>
+                <label>작성자:</label>
+                <%= post.writer %>
+            </div>
+
+            <div>
+                <label>작성 시간:</label>
+                <%= new Date(post.created_date).toISOString().slice(0, 19).replace("T", " ") %>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <p></p>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='/list/<%= post.id %>/update'"
+                    type="button">게시글 수정
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='/list/<%= post.id %>/delete'"
+                    type="button">게시글 삭제
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="history.back()"
+                    type="button">목록으로
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

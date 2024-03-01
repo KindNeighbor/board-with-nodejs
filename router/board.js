@@ -7,6 +7,7 @@ router.use(express.urlencoded({
     extened: true
 }));
 
+// 게시글 목록 조회
 router.get('/list', async (req, res) => {
     try {
         const connection = await db.getConnection();
@@ -38,10 +39,12 @@ router.get('/list', async (req, res) => {
     }
 });
 
+// 게시글 생성 페이지
 router.get('/list/create', (req, res) => {
     res.render('create')
 })
 
+// 게시글 생성
 router.post('/create', async (req, res) => {
     try {
         const connection = await db.getConnection();
@@ -76,6 +79,47 @@ router.post('/create', async (req, res) => {
         res.redirect('/list');
     } catch (err) {
         console.error('Error while creating post:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/list/:id', async (req, res) => {
+    try {
+        const connection = await db.getConnection();
+        if (!connection) {
+            // 오류 처리
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        const postId = req.params.id;
+
+        // 게시글 조회 쿼리
+        const query = "SELECT * FROM BOARD WHERE id = :postId";
+        const result = await connection.execute(query, { postId });
+
+        // 결과 처리
+        if (result.rows.length === 0) {
+            // 해당 ID에 해당하는 게시글이 없는 경우
+            res.status(404).send('Not Found');
+            return;
+        }
+
+        const post = {
+            id: result.rows[0][0],
+            title: result.rows[0][1],
+            content: result.rows[0][2],
+            writer: result.rows[0][3],
+            created_date: result.rows[0][4],
+            modified_date: result.rows[0][5]
+        };
+
+        res.render('detail', { post });
+
+        // 연결 반환
+        await connection.close();
+    } catch (err) {
+        console.error('Error while fetching post details:', err);
         res.status(500).send('Internal Server Error');
     }
 });
