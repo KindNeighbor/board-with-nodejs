@@ -18,21 +18,23 @@
             <th>제목</th>
             <th>본문</th>
             <th>작성자</th>
+            <th>작성 시간</th>
         </tr>
         </thead>
         <tbody>
         <% posts.forEach(post => { %>
             <tr>
-                <td></td>
+                <td><%= post.id %></td>
                 <td><%= post.title %></td>
                 <td><%= post.content %></td>
                 <td><%= post.writer %></td>
+                <td><%= post.created_date.toISOString().slice(0, 19).replace("T", " ") %></td>
             </tr>
         <% }); %>
         </tbody>
     </table>
     <div class="row">
-        <div class="col text-left">
+        <div class="col text-right">
             <button class="btn btn-primary float-end" onclick="location.href='/list/create'" type="button">게시글 등록</button>
         </div>
     </div>
