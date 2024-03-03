@@ -83,6 +83,7 @@ router.post('/create', async (req, res) => {
     }
 });
 
+// 게시글 상세 조회
 router.get('/list/:id', async (req, res) => {
     try {
         const connection = await db.getConnection();
@@ -120,6 +121,31 @@ router.get('/list/:id', async (req, res) => {
         await connection.close();
     } catch (err) {
         console.error('Error while fetching post details:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/list/:id/delete', async (req, res) => {
+    try {
+        const connection = await db.getConnection();
+        if (!connection) {
+            // 오류 처리
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        const postId = req.params.id;
+
+        // 게시글 삭제 쿼리
+        const query = "DELETE FROM BOARD WHERE id = :postId";
+        const result = await connection.execute(query, {postId});
+
+        res.redirect('/list');
+
+        // 연결 반환
+        await connection.close();
+    } catch (err) {
+        console.error('Error while deleting post:', err);
         res.status(500).send('Internal Server Error');
     }
 });
