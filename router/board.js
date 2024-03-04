@@ -4,7 +4,7 @@ var db = require('../lib/db');
 
 // post
 router.use(express.urlencoded({
-    extened: true
+    extended : true
 }));
 
 // 게시글 목록 조회
@@ -17,7 +17,7 @@ router.get('/list', async (req, res) => {
             return;
         }
 
-        const query = "SELECT * FROM BOARD"; // 여기에 실제 테이블 이름을 넣어주세요
+        const query = "SELECT * FROM BOARD";
         const result = await connection.execute(query);
 
         // 결과 처리
@@ -125,7 +125,8 @@ router.get('/list/:id', async (req, res) => {
     }
 });
 
-router.get('/list/:id/delete', async (req, res) => {
+// 게시물 삭제
+router.delete('/list/:id/delete', async (req, res) => {
     try {
         const connection = await db.getConnection();
         if (!connection) {
@@ -138,15 +139,16 @@ router.get('/list/:id/delete', async (req, res) => {
 
         // 게시글 삭제 쿼리
         const query = "DELETE FROM BOARD WHERE id = :postId";
-        const result = await connection.execute(query, {postId});
+        const result = await connection.execute(query, { postId });
 
-        res.redirect('/list');
+        res.json({ success: true, message: '게시글이 성공적으로 삭제되었습니다.' });
 
         // 연결 반환
+        await connection.commit();
         await connection.close();
     } catch (err) {
         console.error('Error while deleting post:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 

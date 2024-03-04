@@ -56,7 +56,7 @@
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
-                    onclick="location.href='/list/<%= post.id %>/delete'"
+                    onclick="deletePost(<%= post.id %>)"
                     type="button">게시글 삭제
             </button>
         </div>
@@ -68,5 +68,23 @@
         </div>
     </div>
 </div>
+<script>
+    async function deletePost(id) {
+        try {
+            const response = await fetch(`/list/${id}/delete`, {
+                method: 'DELETE',
+            });
+
+            if(response.ok) {
+                // 삭제가 성공적으로 이루어졌다면 페이지를 새로고침
+                window.location.href = '/list';
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
 </body>
 </html>
