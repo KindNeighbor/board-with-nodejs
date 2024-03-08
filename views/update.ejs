@@ -6,25 +6,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <title>게시글 추가</title>
+    <title>게시글 수정</title>
 </head>
 <body>
 <div class="container">
     <div class="py-5 text-center">
-        <h1>게시글 추가</h1>
+        <h1>게시글 수정</h1>
     </div>
-    <form action="/create" method="post">
+    <form action="/list/<%= post.id %>/update" method="post">
         <div>
             <label for="title">제목</label>
-            <input type="text" id="title" name="title" class="form-control" required>
-        </div>
-        <div>
-            <label for="title">작성자</label>
-            <input type="text" id="writer" name="writer" class="form-control">
+            <input type="text" id="title" name="title" class="form-control" value="<%= post.title %>" required>
         </div>
         <div>
             <label for="title">본문</label>
-            <textarea id="content" name="content" class="form-control" cols="30" rows="5" style="resize: none;"></textarea>
+            <textarea id="content" name="content" class="form-control" cols="30" rows="5" style="resize: none;"><%= post.content %></textarea>
         </div>
         <hr class="my-4">
         <div class="row">

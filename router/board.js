@@ -144,6 +144,83 @@ router.delete('/list/:id/delete', async (req, res) => {
         res.json({ success: true, message: '게시글이 성공적으로 삭제되었습니다.' });
 
         // 연결 반환
+        await connection.commit(); // 오라클은 커밋을 해야한다. 커밋을..!!
+        await connection.close();
+    } catch (err) {
+        console.error('Error while deleting post:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// 게시물 수정 페이지
+router.get('/list/:id/update', async (req, res) => {
+    try {
+        const connection = await db.getConnection();
+        if (!connection) {
+            // 오류 처리
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        const postId = req.params.id;
+
+        // 게시글 조회 쿼리
+        const query = "SELECT * FROM BOARD WHERE id = :postId";
+        const result = await connection.execute(query, { postId });
+
+        // 결과 처리
+        if (result.rows.length === 0) {
+            // 해당 ID에 해당하는 게시글이 없는 경우
+            res.status(404).send('Not Found');
+            return;
+        }
+
+        const post = {
+            id: result.rows[0][0],
+            title: result.rows[0][1],
+            content: result.rows[0][2],
+            writer: result.rows[0][3],
+            created_date: result.rows[0][4],
+            modified_date: result.rows[0][5]
+        };
+
+        res.render('update', { post });
+
+        // 연결 반환
+        await connection.close();
+    } catch (err) {
+        console.error('Error while fetching post details:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// 게시물 수정
+router.post('/list/:id/update', async (req, res) => {
+    try {
+        const connection = await db.getConnection();
+        if (!connection) {
+            // 오류 처리
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        const postId = req.params.id;
+
+        const newPost = {
+            title: req.body.title,
+            content: req.body.content
+        };
+
+        let currentTime = new Date();
+        const formattedCurrentTime = currentTime.toISOString().slice(0, 19).replace("T", " ");
+
+        // 게시글 업데이트 쿼리
+        const query = "UPDATE BOARD SET title = :title, content = :content, modified_date = TO_TIMESTAMP(:modified_date, 'YYYY-MM-DD HH24:MI:SS') WHERE id = :postId";
+        await connection.execute(query, { title: newPost.title, content: newPost.content, modified_date: formattedCurrentTime, postId: postId });
+
+        res.redirect('/list/' + postId);
+
+        // 연결 반환
         await connection.commit();
         await connection.close();
     } catch (err) {
